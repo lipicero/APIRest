@@ -33,7 +33,7 @@ CREATE TABLE `libros` (
   `autor` varchar(30) DEFAULT NULL,
   `categoria` varchar(30) DEFAULT NULL,
   `año_publicacion` date DEFAULT NULL,
-  `ISBN` varchar(13) DEFAULT NULL
+  `ISBN` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -56,6 +56,17 @@ INSERT INTO `libros` (`id`, `nombre`, `autor`, `categoria`, `año_publicacion`, 
 --
 ALTER TABLE `libros`
   ADD PRIMARY KEY (`id`);
+  ADD UNIQUE KEY `ISBN` (`ISBN`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `libros`
+--
+ALTER TABLE `libros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
