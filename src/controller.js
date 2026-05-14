@@ -22,42 +22,33 @@ class libroController {
   }
   async add(req, res) {
     try {
-      const { libros } = req.body;
+      const { nombre, autor, categoria, año_publicacion, ISBN } = req.body;
       const [result] = await pool.query(
         "INSERT INTO libros (nombre, autor, categoria, año_publicacion, ISBN) VALUES (?, ?, ?, ?, ?)",
-        [
-          libros.nombre,
-          libros.autor,
-          libros.categoria,
-          libros.año_publicacion,
-          libros.ISBN,
-        ],
+        [nombre, autor, categoria, año_publicacion, ISBN],
       );
       res.json({ "Libro agregado correctamente": result.insertId });
     } catch (error) {
-        
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({
-                error: "El ISBN ya existe"
-            });
-        }
-      res.status(500).json({ error: "Error al agregar el libro", message: error.message });
+      if (error.code === "ER_DUP_ENTRY") {
+        return res.status(409).json({
+          error: "El ISBN ya existe",
+        });
+      }
+      res.status(500).json({ error: "Error al agregar el libro" });
     }
   }
   async update(req, res) {
     try {
-      const { libros } = req.body;
+      const { nombre, autor, categoria, año_publicacion, ISBN, id } = req.body;
       const [result] = await pool.query(
         "UPDATE libros SET nombre = (?), autor = (?), categoria = (?), año_publicacion = (?), ISBN = (?) WHERE id = (?)",
-        [
-          libros.nombre,
-          libros.autor,
-          libros.categoria,
-          libros.año_publicacion,
-          libros.ISBN,
-          libros.id,
-        ],
+        [nombre, autor, categoria, año_publicacion, ISBN, id],
       );
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          error: "Libro no encontrado",
+        });
+      }
       res.json({ "Libro actualizado correctamente": result.changedRows });
     } catch (error) {
       res.status(500).json({ error: "Error al actualizar el libro" });
